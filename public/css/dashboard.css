@@ -1,0 +1,895 @@
+/* RESET RULES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
+
+:root {
+    --page-header-bgColor: #242e42;
+    --page-header-bgColor-hover: #1d2636;
+    --page-header-txtColor: #dde9f8;
+    --page-header-headingColor: #7889a4;
+    --page-header-width: 220px;
+    --page-content-bgColor: #f0f1f6;
+    --page-content-txtColor: #171616;
+    --page-content-blockColor: #fff;
+    --white: #fff;
+    --black: #333;
+    --blue: #00b9eb;
+    --red: #ec1848;
+    --border-radius: 4px;
+    --box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.075);
+    --switch-bgLightModeColor: #87cefa;
+    --switch-sunColor: gold;
+    --switch-moonColor: #f4f4f4;
+    --switch-bgDarkModeColor: #1f1f27;
+    --page-article-bgColor: rgba(36, 46, 66, 0.7);
+    --page-input-bgColor: #fff;
+    --page-input-fgColor: #000;
+    --label-success: lightgreen;
+    --label-fail: rgb(255, 62, 62);
+    --label-new: gold;
+    --label-viewed: white;
+    --editing-icons: GoldenRod;
+    --comments-background: #f1efec;
+    --comments-text-color: #2c303a;
+    --comment-button-position: 50px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style: none;
+}
+
+a,
+button {
+    color: inherit;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    background: none;
+    cursor: pointer;
+}
+
+input {
+    -webkit-appearance: none;
+}
+
+[type="checkbox"] {
+    position: absolute;
+    left: -9999px;
+}
+
+label {
+    cursor: pointer;
+}
+
+button,
+input {
+    border: none;
+}
+
+svg {
+    display: block;
+}
+
+body {
+    font: 16px/1.5 "Lato", sans-serif;
+}
+
+.success {
+    color: var(--label-success);
+}
+
+.fail {
+    color: var(--label-fail);
+}
+
+.new {
+    color: var(--label-new);
+}
+
+.viewed {
+    color: var(--label-viewed);
+}
+
+.editing {
+    color: var(--editing-icons);
+    width: 25px;
+    font-size: 22px !important;
+}
+
+/* HEADER STYLES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.page-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    padding-top: 20px;
+    width: var(--page-header-width);
+    color: var(--page-header-txtColor);
+    background: var(--page-header-bgColor);
+}
+
+/*In case you prefer an absolutely positioned header that covers the full page height, add these styles*/
+/*body {
+    position: relative;
+}
+
+.page-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+}*/
+
+/*remove these styles*/
+/*.page-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+}*/
+
+.page-header nav {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.page-header .logo {
+    display: block;
+    margin: 0 15px;
+}
+
+.page-header .logo svg {
+    max-width: 120px;
+    fill: var(--white);
+}
+
+.page-header .toggle-mob-menu {
+    display: none;
+    margin-left: 5px;
+    padding: 4px;
+    background: var(--page-content-blockColor);
+    border-radius: var(--border-radius);
+}
+
+.page-header .toggle-mob-menu svg {
+    fill: var(--black);
+    transition: transform 0.2s;
+}
+
+.page-header .admin-menu {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-top: 35px;
+}
+
+.page-header .admin-menu li:nth-last-child(2) {
+    margin-bottom: 35px;
+}
+
+.page-header .admin-menu li:last-child {
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.page-header .admin-menu li>* {
+    width: 100%;
+    padding: 12px 15px;
+}
+
+.page-header .admin-menu .switcher {
+    display: inline-block;
+    width: auto;
+}
+
+.page-header .admin-menu .menu-heading h3 {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 12px;
+    margin-top: 12px;
+    color: var(--page-header-headingColor);
+}
+
+.page-header .admin-menu svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--page-header-txtColor);
+    margin-right: 10px;
+}
+
+.page-header .admin-menu a,
+.page-header .admin-menu button {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.page-header .admin-menu a .active,
+.page-header .admin-menu button .active,
+.page-header .admin-menu a:hover,
+.page-header .admin-menu a:focus,
+.page-header .admin-menu button:hover,
+.page-header .admin-menu button:focus {
+    background: var(--page-header-bgColor-hover);
+    color: var(--blue);
+    outline: none;
+}
+
+.page-header .admin-menu a:hover svg,
+.page-header .admin-menu a:focus svg,
+.page-header .admin-menu button:hover svg,
+.page-header .admin-menu button:focus svg {
+    fill: var(--blue);
+}
+
+
+/* PAGE CONTENT STYLES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.page-content {
+    position: relative;
+    left: var(--page-header-width);
+    width: calc(100% - var(--page-header-width));
+    min-height: 100vh;
+    padding: 30px;
+    color: var(--page-content-txtColor);
+    background: var(--page-content-bgColor);
+}
+
+.page-content {
+    /* The image used
+
+    background:
+         top, transparent black, faked with gradient
+        linear-gradient(#0009,
+            #0009),
+
+        url("../images/hero-bg.jpg");
+
+    Full height */
+
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+article {
+    /* The image used */
+    color: var(--page-header-txtColor);
+    background:
+        /* top, transparent black, faked with gradient */
+        linear-gradient(var(--page-article-bgColor),
+            var(--page-article-bgColor)) !important;
+
+    /* Full height */
+    height: 100% !important;
+
+}
+
+article table {
+    color: var(--page-header-txtColor);
+}
+
+article h1 {
+    margin: 10px 0 0 0;
+}
+
+article h4 {
+    margin: 0 0 20px 0;
+}
+
+article h3 {
+    color: var(--page-header-txtColor);
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+    background: var(--page-input-bgColor);
+    color: var(--page-input-fgColor);
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+    background-color: #E5E6E7;
+}
+
+.contact-form .chklabel .check-box-effect {
+    border: 3px solid var(--page-header-txtColor);
+
+}
+
+.contact-form .chklabel .check-box-effect:before {
+    background: var(--page-header-txtColor);
+}
+
+.contact-form .chklabel .check-box-effect:after {
+    background: var(--page-header-txtColor);
+}
+
+.contact-form .chklabel1 .check-box-effect1 {
+    border: 1px solid var(--page-header-txtColor);
+
+}
+
+.contact-form .chklabel1 .check-box-effect1:before {
+    background: var(--page-header-txtColor);
+}
+
+.contact-form .chklabel1 .check-box-effect1:after {
+    background: var(--page-header-txtColor);
+}
+
+.search-and-user {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-column-gap: 50px;
+    align-items: center;
+    background: var(--page-content-bgColor);
+    margin-bottom: 30px;
+}
+
+.search-and-user form {
+    position: relative;
+}
+
+.search-and-user [type="search"] {
+    width: 100%;
+    height: 50px;
+    font-size: 1.5rem;
+    padding-left: 15px;
+    background: var(--page-content-blockColor);
+    color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.search-and-user ::placeholder {
+    color: var(--page-content-txtColor);
+}
+
+.search-and-user form svg {
+    width: 26px;
+    height: 26px;
+    fill: var(--page-content-txtColor);
+}
+
+.search-and-user form button {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+}
+
+.search-and-user .admin-profile {
+    display: flex;
+    align-items: center;
+}
+
+.search-and-user .admin-profile .greeting {
+    margin: 0 10px 0 20px;
+}
+
+
+
+.search-and-user .admin-profile svg {
+    width: 30px;
+    height: 30px;
+}
+
+.search-and-user .admin-profile .notifications {
+    position: relative;
+}
+
+.search-and-user .admin-profile .badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -10px;
+    right: -3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 10px;
+    color: var(--white);
+    background: var(--red);
+    cursor: pointer;
+}
+
+.page-content .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 30px;
+}
+
+.page-content .grid>article {
+    display: flex;
+
+    background: var(--page-content-blockColor);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.page-content .grid>article:first-child,
+.page-content .grid>article:last-child {
+    grid-column: 1 / -1;
+}
+
+
+/* MQ RULES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+@media screen and (max-width: 767px) {
+
+    .page-header,
+    .page-content {
+        position: static;
+        width: 100%;
+    }
+
+    .page-header {
+        padding: 10px;
+    }
+
+    .page-header nav {
+        flex-direction: row;
+    }
+
+    .page-header .logo {
+        margin: 0;
+    }
+
+    .page-header .logo svg {
+        width: 83px;
+        height: 35px;
+    }
+
+    .page-header .toggle-mob-menu {
+        display: block;
+    }
+
+    .page-header .admin-menu {
+        position: absolute;
+        left: 98px;
+        top: 57px;
+        margin-top: 0;
+        z-index: 4 !important;
+        border-radius: var(--border-radius);
+        background: var(--page-header-bgColor);
+        visibility: hidden;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: all 0.2s;
+    }
+
+    .page-header .admin-menu li:nth-last-child(2) {
+        margin-bottom: 12px;
+    }
+
+    .page-header .admin-menu li:last-child button,
+    .search-and-user .admin-profile .greeting {
+        display: none;
+    }
+
+    .page-content {
+        min-height: 0;
+        padding: 10px;
+    }
+
+    .page-content .grid {
+        grid-gap: 10px;
+    }
+
+    .search-and-user {
+        position: absolute;
+        left: 131px;
+        top: 10px;
+        padding: 0;
+        grid-column-gap: 5px;
+        width: calc(100% - 141px);
+        border-radius: var(--border-radius);
+        background: transparent;
+    }
+
+    .search-and-user [type="search"] {
+        font-size: 1rem;
+        height: 35px;
+    }
+
+    .search-and-user form svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .search-and-user .admin-profile svg {
+        fill: var(--white);
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .page-content .grid>article {
+        grid-column: 1 / -1;
+    }
+    .admin-menu{
+        z-index: 10 !important;
+    }
+}
+
+
+/* BODY CLASSES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.mob-menu-opened .toggle-mob-menu svg {
+    transform: rotate(180deg);
+}
+
+.mob-menu-opened .page-header .admin-menu {
+    transform: scale(1);
+    visibility: visible;
+    opacity: 1;
+}
+
+@media screen and (min-width: 768px) {
+    .collapsed .page-header {
+        width: 40px;
+    }
+
+    .collapsed .page-header .admin-menu li>* {
+        padding: 10px;
+    }
+
+    .collapsed .page-header .logo,
+    .collapsed .page-header .admin-menu span,
+    .collapsed .page-header .admin-menu .menu-heading {
+        display: none;
+    }
+
+    .collapsed .page-header .admin-menu svg {
+        margin-right: 0;
+    }
+
+    .collapsed .page-header .collapse-btn svg {
+        transform: rotate(180deg);
+    }
+
+    .collapsed .page-content {
+        left: 40px;
+        width: calc(100% - 40px);
+    }
+
+    .admin-profile{
+        color: var(--page-header-txtColor) !important;
+    }
+
+    .greeting {
+        color: var(--page-header-txtColor) !important;
+    }
+}
+
+
+/* SWITCH STYLES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.switch label {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-column-gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.switch span:first-child {
+    position: relative;
+    width: 50px;
+    height: 26px;
+    border-radius: 15px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4);
+    background: var(--switch-bgLightModeColor);
+    transition: all 0.3s;
+}
+
+.switch span:first-child::before,
+.switch span:first-child::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+}
+
+.switch span:first-child::before {
+    top: 1px;
+    left: 1px;
+    width: 24px;
+    height: 24px;
+    background: var(--white);
+    z-index: 1;
+    transition: transform 0.3s;
+}
+
+.switch span:first-child::after {
+    top: 50%;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    transform: translateY(-50%);
+    background: var(--switch-sunColor);
+    box-shadow: 0 0 4px 2px #ffdb1a;
+}
+
+.switch [type="checkbox"]:checked+label span:first-child {
+    background: var(--switch-bgDarkModeColor);
+}
+
+.switch [type="checkbox"]:focus+label span:first-child {
+    box-shadow: 0 3px 5px rgba(255, 255, 255, 0.25);
+}
+
+.switch [type="checkbox"]:checked+label span:first-child::before {
+    transform: translateX(24px);
+}
+
+.switch [type="checkbox"]:checked+label span:first-child::after {
+    left: 12px;
+    width: 15px;
+    height: 15px;
+    background: transparent;
+    box-shadow: -2px -5px 0 var(--switch-moonColor);
+    transform: translateY(-50%) rotate(-72deg);
+}
+
+
+/* LIGHT MODE STYLES
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.light-mode {
+    --page-article-bgColor: rgba(241, 239, 236, .7);
+    --page-header-bgColor: #f1efec;
+    --page-header-bgColor-hover: #b9e4e0;
+    --page-header-txtColor: #2c303a;
+    --page-header-headingColor: #979595;
+    --page-content-bgColor: #fff;
+    --box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.25);
+    --page-input-bgColor: #fff;
+    --page-input-fgColor: #000;
+    --label-success: green;
+    --label-fail: darkred;
+    --label-new: OrangeRed;
+    --label-viewed: black;
+    --editing-icons: SaddleBrown;
+    --comments-background: #242e42;
+    --comments-text-color: #dde9f8;
+}
+
+.light-mode .page-header .admin-menu a:hover,
+.light-mode .page-header .admin-menu a:focus,
+.light-mode .page-header .admin-menu button:hover,
+.light-mode .page-header .admin-menu button:focus {
+    color: var(--black);
+}
+
+.light-mode .page-header .logo svg,
+.light-mode .page-header .admin-menu a:hover svg,
+.light-mode .page-header .admin-menu a:focus svg,
+.light-mode .page-header .admin-menu button:hover svg,
+.light-mode .page-header .admin-menu button:focus svg {
+    fill: var(--black);
+}
+
+.light-mode .switch [type="checkbox"]:focus+label span:first-child {
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
+}
+
+@media screen and (max-width: 767px) {
+    .light-mode .search-and-user .admin-profile svg {
+        fill: var(--black);
+    }
+
+}
+
+
+/* FOOTER
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.page-footer {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 10px;
+    color: #f1efec;
+}
+
+.page-footer a {
+    margin-left: 4px;
+}
+
+.fa-power-off {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 23px;
+}
+
+
+.fa-power-off a:link {
+    text-decoration: none;
+}
+
+.fa-power-off a:visited {
+    text-decoration: none;
+}
+
+.fa-power-off a:hover {
+    text-decoration: none;
+}
+
+.fa-power-off a:active {
+    text-decoration: none;
+}
+
+.notification {
+    position: absolute;
+    right: 30px;
+    top: 90px;
+    width: 400px;
+
+    overflow: auto;
+    max-height: 400px;
+    z-index: 100;
+}
+
+.notification table {
+    border-collapse: separate;
+    border-spacing: 0 1em;
+}
+
+.notification tr {
+    margin-bottom: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+
+}
+
+.notification td {
+    padding: 20px;
+    background-color: var(--page-header-bgColor);
+    color: var(--page-header-txtColor);
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.notification tr td .closebtn {
+    position: relative;
+    left: -10px;
+    top: -10px;
+    border: 0px solid var(--page-header-txtColor);
+    border-radius: 5px;
+    padding: 3px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: red;
+}
+
+.notification tr .pushed {
+    display: none;
+}
+
+#readbg {
+    position: absolute;
+    display: none;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #0009;
+    padding: 10px;
+    z-index: 10;
+}
+
+#readReq {
+    /* Center vertically and horizontally */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    /* Apply negative top and left margins to truly center the element */
+    background: var(--page-header-bgColor);
+    color: var(--page-header-txtColor);
+    padding: 20px;
+    width: auto;
+    max-height: 600px;
+    overflow: auto;
+}
+
+.comment .btn {
+    position: relative;
+    margin-top: -55px;
+    margin-right: 15px;
+    z-index: 1;
+}
+
+.comments-container {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.comments {
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    background-color: var(--comments-background);
+    color: var(--comments-text-color);
+    padding: 10px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin-top: -35px;
+}
+
+.comments-timestamp {
+    text-align: right;
+    color: var(--comments-text-color);
+    padding: 10px;
+    margin-top: -35px;
+}
+
+.comments-username {
+    vertical-align: top;
+    color: var(--editing-icons);
+    padding: 10px;
+}
+
+.comments-remove {
+    float: right;
+    margin-top: -35px;
+    margin-right: 5px;
+}
+
+.comments-remove::after {
+    content: "\274c";
+    /* use the hex value here... */
+}
+
+.comment textarea {
+    border-radius: 10px;
+    background-color: var(--comments-background);
+    color: var(--comments-text-color);
+    padding: 10px;
+    padding-top: 25px;
+    height: var(--comment-button-position);
+    padding-bottom: 25px;
+    z-index: 0;
+}
+
+.comment textarea:focus {
+    background-color: var(--comments-background) !important;
+    color: var(--comments-text-color) !important;
+}
+
+#mgrcomment:focus{
+    background-color: var(--comments-background) !important;
+    color: var(--comments-text-color) !important;
+}
+
+.currencyinput {
+    position: absolute;
+    margin-top: 8px;
+    margin-left: 10px;
+    color: green
+}
+
+[type="number"] {
+    text-align: right;
+}

@@ -1,0 +1,50 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('project_orders', function (Blueprint $table) {
+            $table->id();
+            $table->string('purchases_serial_no',10);
+            $table->string('project_serial_no',10)->nullable();
+            $table->bigInteger('item_id')->unsigned()->nullable();
+            $table->string('item');
+            $table->string('Code');
+            $table->string('details');
+            $table->integer('delivery');
+            $table->timestamp('due_date')->nullable();
+            $table->double('price')->nullable();
+            $table->integer('qty')->nullable();
+            $table->double('total')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('description')->nullable();
+            $table->integer('status')->nullable();
+            $table->integer('canceled')->nullable();
+            $table->timestamps();
+
+            $table->foreign('project_serial_no')->references('serial_no')->on('projects')->onDelete('set null')->onUpdate('set null');
+            $table->foreign('purchases_serial_no')->references('serial_no')->on('purchases')->onDelete('cascade')->onUpdate('cascade');
+
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('project_orders');
+    }
+};
