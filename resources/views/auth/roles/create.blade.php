@@ -2,90 +2,60 @@
 
 
 @section('articles')
-<link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
-@can('create-role')
+    @can('create-role')
 
-<div class="rightside">
-    <div class="contact-form" id="contact-form">
-            <div>
-                <div>
-                    <div>
-                        <a class="btn btn-warning" href="{{ route('roles.index') }}"><i class="fa fa-arrow-left"></i>
-                            Back</a>
-                    </div>
-                    <div>
-                        <h2>Create New Role</h2>
-                    </div>
+    <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
 
-                </div>
-            </div>
-            @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                    <ul>
+    <div class="role-form">
+        <div class="role-head">
+            <h2>Create New Role</h2>
+            <a class="btn btn-warning" href="{{ route('roles.index') }}"><i class="fa fa-arrow-left"></i> Back</a>
+        </div>
+
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <div id="conts">
-                <div id="req" class="req">
-
-
-
-{!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Name:</strong>
-            {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Permission:</strong>
-            <br/>
-
-            <label class="chklabel">
-                <input type="checkbox" class="cdusd" id="checkAll" > <span style="margin-top: -10px">Toggle All</span>
-                <span class="check-box-effect" ></span>
-            </label>
-            <br/>
-            @foreach($permission as $value)
-            <label class="chklabel">
-
-                <input type="checkbox" class="cdusd"
-                    name="permission[]" value="{{$value->id}}">{{$value->name}}
-                <span class="check-box-effect"></span>
-            </label>
-
-            <br/>
-            @endforeach
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</div>
-@push('custom-scripts')
-    <script >
-        $("#checkAll").click(function(){
-            $('input:checkbox').not(this).prop('checked', this.checked);
-        });
-    </script>
-@endpush
-{!! Form::close() !!}
-
-
-                </div>
+                </ul>
             </div>
-@else
-<div>
-    <h2>
-        You Cannot Create New Role...
-    </h2>
-</div>
-@endcan
+        @endif
+
+        {!! Form::open(['route' => 'roles.store', 'method' => 'POST']) !!}
+
+            <div class="form-group">
+                <label class="field-label" for="name">Name</label>
+                {!! Form::text('name', null, ['id' => 'name', 'placeholder' => 'Role name', 'class' => 'form-control']) !!}
+            </div>
+
+            <div class="perm-toolbar">
+                <span class="field-label">Permissions</span>
+                <label class="perm-selectall">
+                    <input type="checkbox" id="checkAll">
+                    Select all
+                </label>
+            </div>
+
+            @include('auth.roles._permissions', ['selected' => []])
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Create role</button>
+            </div>
+
+        {!! Form::close() !!}
+    </div>
+
+    @push('custom-scripts')
+        <script>
+            $("#checkAll").on('change', function () {
+                $('.perm-item input[type=checkbox]').prop('checked', this.checked);
+            });
+        </script>
+    @endpush
+
+    @else
+        <div><h2>You cannot create new roles...</h2></div>
+    @endcan
 @endsection
