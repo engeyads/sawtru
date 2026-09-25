@@ -117,6 +117,11 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        // Only allow safe image uploads (type and size).
+        $request->validate([
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+        ]);
+
         //$userSchema = User::first();
         $id = auth()->user()->id;
         $dtnow = date('Y-m-d');
@@ -384,6 +389,15 @@ class ProjectController extends Controller
                 ]);
             }
         }elseif ($request->has('assembling')) {
+            // Only allow safe image uploads for the assembling photo sets.
+            $request->validate([
+                'motors.*.motorreal' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+                'asd.*'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+                'mtd.*'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+                'Horizontal.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+                'Vertical.*'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            ]);
+
             $id = auth()->user()->id;
             $dtnow = date('Y-m-d');
             $inDate = date('Y-m-d', strtotime($dtnow. ' + ' . $request->dtime . ' days'));
@@ -594,6 +608,12 @@ class ProjectController extends Controller
 
 
             }elseif($project->phase == 1){
+
+                // Only allow safe image uploads for purchase-order item photos.
+                $request->validate([
+                    'motors.*.photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+                    'others.*.photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+                ]);
 
                 if($num = Purchases::latest('ID')->first()){
                     $num = str_pad(($num->id+1), 5, '0', STR_PAD_LEFT);

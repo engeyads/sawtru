@@ -1,0 +1,14 @@
+# Uploaded files are user-supplied. Never execute anything from this
+# directory — serve it as static content only (defense-in-depth against
+# a malicious file being uploaded and then requested as a script).
+
+# Deny direct access to anything that could be executed.
+<FilesMatch "\.(?i:php|phtml|phps|php[0-9]|phar|pl|py|cgi|asp|aspx|jsp|sh|shtml|fcgi|htaccess)$">
+    Require all denied
+</FilesMatch>
+
+# Make sure these extensions are never handed to an interpreter, so even
+# if the deny rule above is bypassed the file is treated as plain data.
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
+AddType text/plain .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
