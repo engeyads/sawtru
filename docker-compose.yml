@@ -5,6 +5,7 @@ services:
     ports:
       - "8000:80"
     environment:
+      APP_NAME: Sawtru
       APP_URL: http://localhost:8000
       DB_CONNECTION: mysql
       DB_HOST: db
