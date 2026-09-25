@@ -13,35 +13,23 @@
             </ul>
         </div>
     @endif
-    {{-- last phases --}}
-    <div class="contact-form">
-        <div class="rightside">
-            <table>
-                <tr>
-                    <td style="font-size:23px;">
-                        <a href="{{ route('profile') }}">
-                            <i class="fa fa-user" style="font-size:82px;"></i><br />
-                            Profile
-                        </a>
-                    </td>
-                    @can('list-users')
-                        <td style="font-size:23px;">
-                            <a href="{{ route('users.index') }}">
-                                <i class="fa fa-plus" style="font-size:82px;"></i><br />
-                                Users
-                            </a>
-                        </td>
-                    @endcan
-                    @can('list-role')
-                        <td style="font-size:23px;">
-                            <a href="{{ route('roles.index') }}">
-                                <i class="fa fa-lock" style="font-size:82px;"></i><br />
-                                Roles
-                            </a>
-                        </td>
-                    @endcan
-                </tr>
-            </table>
-        </div>
+
+    <div class="settings-menu">
+        <a href="{{ route('profile') }}" class="settings-card">
+            <i class="fa fa-user"></i>
+            <span>Profile</span>
+        </a>
+        @can('list-users')
+            <a href="{{ route('users.index') }}" class="settings-card">
+                <i class="fa fa-plus"></i>
+                <span>Users</span>
+            </a>
+        @endcan
+        @can('list-role')
+            <a href="{{ route('roles.index') }}" class="settings-card">
+                <i class="fa fa-lock"></i>
+                <span>Roles</span>
+            </a>
+        @endcan
     </div>
 @endsection
