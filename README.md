@@ -1,64 +1,162 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sawtru — Machine Project & Purchasing Management
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sawtru is an internal web dashboard for a custom machine manufacturing workshop. It follows each machine project from the first engineering request, through assembly planning and purchase orders, to delivery. It also keeps engineers, managers and purchasing staff informed with comments and notifications.
 
-## About Laravel
+## What it does
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+An **engineer** opens a project request for a new machine. They enter its dimensions, volume, voltage, control type (traditional or PLC), a photo, and the materials it needs (metals, motors and other parts). An **admin/manager** reviews the request. The project then moves through a series of phases, and an admin approves each one before the next can start:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Phase | Name | What happens |
+|---|---|---|
+| 0 | **New Request** | Engineer submits the machine spec and bill of materials; assigns a manager. |
+| 1 | **Assembling** | Engineer uploads vertical, horizontal, diagram and assembling photos. They also enter labor costs (laser cutting, CNC, lathe, assembling, electrical & automation) and the number of days needed. |
+| 2 | **Purchase Order (PO)** | A purchase order is generated from the project's items (code, details, quantity, delivery, photo). |
+| 3 | **Purchases** | Purchasing staff price each item, mark items as done or canceled (with a reason), and track progress. |
+| 4 | **Completed** | Project finished. |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+An admin can approve a phase, which records the approval date and sets a due date. An admin can also send a project back to the previous phase. The dates of each phase are stored on the project.
 
-## Learning Laravel
+**Serial numbers:** projects are numbered `YY` + a 5-digit sequence (e.g. `2600012`). Purchase orders are numbered `PO` + `YY` + a 5-digit sequence (e.g. `PO2600007`).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Features
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Project management**: create, edit, review and delete machine projects, each with its own metals, motors, other items and photo galleries.
+- **Phase workflow**: each phase needs admin approval, and each project tracks its due date.
+- **Purchase orders**: generate POs from a project, then price items, track them, and mark them done or canceled.
+- **Comments**: comment threads on each project. Deleting a comment hides it and records who removed it and when; nothing is erased.
+- **Notifications**: email notifications when a project is created or commented on. The in-app notification log, Firebase push notifications (FCM) and real-time broadcasting all have partial support.
+- **Roles & permissions**: access control with [spatie/laravel-permission](https://github.com/spatie/laravel-permission) (see below).
+- **User & role management**: admins manage users, roles and permissions from the dashboard.
+- **PDF export**: project and purchase-order reports are generated in the browser with jsPDF / pdf-lib.
+- **User settings**: profile page and personal theme colors.
 
-## Laravel Sponsors
+## Roles
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+The database seeder creates three roles:
 
-### Premium Partners
+| Role | Can do |
+|---|---|
+| **Admin** | Everything: users, roles, settings, all projects and purchases, phase approval, PDF export. |
+| **Engineer** | Create projects and manage their own, submit assembling details, create purchase orders. |
+| **Purchaser** | View purchase orders, create them, and edit or delete their own. |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Tech Stack
 
-## Contributing
+| Layer | Technology |
+|---|---|
+| Backend | Laravel 9 (PHP ≥ 8.0.2) |
+| Database | MySQL |
+| Frontend | Blade templates, Bootstrap 5, Sass, Vue 3 (via Vite) |
+| Auth | Laravel UI (session auth), Laravel Sanctum |
+| Permissions | spatie/laravel-permission |
+| Real-time | Laravel Echo, Pusher / laravel-websockets, Redis (predis), and a Socket.IO server in `server.js` |
+| Notifications | Mail, Firebase Cloud Messaging (larafirebase) |
+| PDF | jsPDF, jspdf-autotable, pdf-lib (client-side), barryvdh/laravel-dompdf |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Project Structure
 
-## Code of Conduct
+```
+app/
+  Http/Controllers/   ProjectController (phase workflow), PurchasesController,
+                      UserController, RoleController, SettingsController, HomeController
+  Models/             Project, project_metals / motors / others / lasers,
+                      project_*_photos, purchases, project_orders, Comments, Notificationtb
+  Notifications/      Email, push and real-time notifications
+  Events/             Broadcast events
+database/
+  migrations/         Full schema (projects, items, photos, purchases, orders, comments…)
+  seeders/            Roles & permissions, admin user, demo users
+resources/views/
+  pages/projects/     Create, show, edit, assembling, PO, report screens
+  pages/purchases/    Purchase order screens
+  auth/               Login, profile, users and roles management
+routes/web.php        All dashboard routes (under /dashboard)
+server.js             Standalone Socket.IO chat/broadcast server (HTTPS, port 3000)
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Data Model (overview)
 
-## Security Vulnerabilities
+- `projects` is keyed by `serial_no` and belongs to a creator (`uid`) and an assigned manager (`admin`).
+- `project_metals`, `project_motors` and `project_others` hold the project's bill of materials.
+- `project_lasers` holds labor and machining costs (laser, CNC, lathe, assembling, electrical).
+- `project_vertical_photos`, `project_horizontal_photos`, `project_diagram_photos` and `project_assembling_photos` hold the photo galleries.
+- `purchases` holds purchase orders, keyed by `serial_no` (`PO…`) and linked to a project.
+- `project_orders` holds the line items of each purchase order.
+- `comments` holds comments on projects and purchase orders.
+- `notificationtbs` is the in-app notification log.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Getting Started
+
+### Requirements
+
+- PHP 8.0.2+ and Composer
+- Node.js & npm
+- MySQL
+- Redis (optional, for broadcasting/queues)
+
+### Installation
+
+```bash
+git clone <repo-url> sawtru
+cd sawtru
+
+composer install
+npm install
+
+cp .env.example .env
+php artisan key:generate
+```
+
+Set your database credentials in `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sawtru
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Also configure `MAIL_*` for email notifications, and optionally `PUSHER_*` for real-time broadcasting.
+
+Run the migrations and seed the roles and demo users:
+
+```bash
+php artisan migrate --seed
+```
+
+Create the uploads folder (project photos are saved to `public/uploads/`), then build the assets and start the app:
+
+```bash
+mkdir -p public/uploads
+npm run dev        # or: npm run build
+php artisan serve
+```
+
+Open http://localhost:8000 and sign in.
+
+### Demo accounts (seeded)
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@sawtru.dev` | `123456` |
+| Engineer | `mohammed_alfarra@sawtru.dev` | `123456` |
+| Purchaser | `mohammed_ali@sawtru.dev` | `123456` |
+
+> These accounts are for local development only. Change or remove them before deploying.
+
+### Optional: Socket.IO server
+
+`server.js` runs over HTTPS on port 3000 and needs a certificate in the project root. Certificates and keys are not committed to the repo, so generate a self-signed pair first:
+
+```bash
+openssl req -x509 -newkey rsa:2048 -nodes -days 365 \
+  -keyout selfsigned.key -out selfsigned.crt -subj "/CN=localhost"
+
+node server.js
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Released under the [Apache License 2.0](LICENSE).

@@ -21,3 +21,10 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+
+# SSL certificates and private keys
+*.pem
+*.key
+*.key.pub
+*.crt
+*.cert
