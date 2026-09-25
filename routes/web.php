@@ -22,10 +22,6 @@ use App\Http\Controllers\SettingsController;
 Route::get('/', function () {
     return view('auth.login');
 });
-Route::get('/t', function () {
-    event(new \App\Events\SendMessage());
-    dd('Event Run Successfully.');
-});
 // Registration is disabled: this is an internal tool and accounts are
 // created by an Admin from the Manage Users screen.
 Auth::routes(['register' => false]);
