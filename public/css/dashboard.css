@@ -978,3 +978,154 @@ article h3 {
     font-size: 1.25rem;
     font-weight: 600;
 }
+
+
+/* ROLE FORM — permission picker (professional, grouped, responsive)
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.role-form {
+    width: 100%;
+    max-width: 1040px;
+    margin: 0 auto;
+}
+
+.role-form .role-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.role-form .role-head h2 {
+    margin: 0;
+}
+
+.role-form .field-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.role-form input[type="text"].form-control {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: var(--page-input-bgColor);
+    color: var(--page-input-fgColor);
+    font-size: 1rem;
+}
+
+.perm-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 18px 0 14px;
+}
+
+.perm-toolbar .field-label {
+    margin: 0;
+}
+
+.perm-selectall {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #D9A840;
+}
+
+.perm-selectall input {
+    width: 18px;
+    height: 18px;
+    accent-color: #D9A840;
+    cursor: pointer;
+}
+
+.perm-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.perm-group {
+    background: #242e42;
+    border: 1px solid rgba(217, 168, 64, 0.28);
+    border-radius: 10px;
+    padding: 16px 16px 8px;
+}
+
+.perm-group h3 {
+    margin: 0 0 10px;
+    font-size: 0.82rem;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #D9A840;
+}
+
+.perm-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 8px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #e7edf7;
+    font-size: 0.95rem;
+    transition: background 0.12s ease;
+}
+
+.perm-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.perm-item input[type="checkbox"] {
+    flex: 0 0 auto;
+    /* Undo the global custom-checkbox hiding ([type=checkbox]{position:absolute;left:-9999px})
+       so these render as real, in-place checkboxes. */
+    position: static;
+    left: auto;
+    -webkit-appearance: auto;
+    appearance: auto;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: #D9A840;
+    /* Ensure the native box renders light on the dark card. */
+    color-scheme: light;
+    cursor: pointer;
+}
+
+.perm-selectall input[type="checkbox"] {
+    position: static;
+    left: auto;
+    -webkit-appearance: auto;
+    appearance: auto;
+    color-scheme: light;
+}
+
+.role-form .form-actions {
+    margin-top: 22px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.role-form .btn-submit {
+    background: linear-gradient(90deg, #E7B84B, #D9A840);
+    color: #242e42;
+    font-weight: 700;
+    border: none;
+    padding: 11px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.role-form .btn-submit:hover {
+    filter: brightness(1.05);
+}
