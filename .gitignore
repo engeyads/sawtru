@@ -28,3 +28,8 @@ Homestead.json
 *.key.pub
 *.crt
 *.cert
+
+# OS / backup junk
+.DS_Store
+__MACOSX/
+*.zip

@@ -87,14 +87,45 @@ server.js             Standalone Socket.IO chat/broadcast server (HTTPS, port 30
 
 ## Getting Started
 
-### Requirements
+### Run with Docker (recommended)
+
+The only requirement is [Docker](https://www.docker.com/) with Docker Compose.
+
+```bash
+git clone <repo-url> sawtru
+cd sawtru
+docker compose up -d --build
+```
+
+The first start builds the image, waits for MySQL, runs the migrations and seeds the demo data. After that it's available at:
+
+| Service | URL |
+|---|---|
+| App | http://localhost:8000 |
+| Mailpit (inbox for emails the app sends) | http://localhost:8025 |
+| MySQL (for DB tools) | `localhost:3307`, user `sawtru`, password `secret` |
+
+Useful commands:
+
+```bash
+docker compose logs -f app                 # follow app logs
+docker compose exec app php artisan <cmd>  # run artisan commands
+docker compose down                        # stop (data is kept)
+docker compose down -v                     # stop and delete DB, uploads and storage
+```
+
+The code is copied into the image, so run `docker compose up -d --build` again after changing it.
+
+### Run locally (without Docker)
+
+#### Requirements
 
 - PHP 8.0.2+ and Composer
 - Node.js & npm
 - MySQL
 - Redis (optional, for broadcasting/queues)
 
-### Installation
+#### Installation
 
 ```bash
 git clone <repo-url> sawtru
