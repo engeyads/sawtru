@@ -449,10 +449,18 @@ article h3 {
 
 .page-content .grid>article {
     display: flex;
+    /* Inner padding so page content isn't flush against the panel edges. */
+    padding: 24px 28px;
 
     background: var(--page-content-blockColor);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+}
+
+@media screen and (max-width: 767px) {
+    .page-content .grid>article {
+        padding: 16px;
+    }
 }
 
 .page-content .grid>article:first-child,
