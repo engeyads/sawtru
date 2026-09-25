@@ -358,7 +358,7 @@ article h3 {
     font-size: 1.5rem;
     padding-left: 15px;
     background: var(--page-content-blockColor);
-    color: var(--white);
+    color: var(--page-input-fgColor);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
 }
@@ -576,11 +576,14 @@ article h3 {
     }
 
     .admin-profile{
-        color: var(--page-header-txtColor) !important;
+        /* The top bar sits on the light content background in both themes,
+           so its text/icons must use the content text color, not the
+           sidebar's (light) text color. */
+        color: var(--page-content-txtColor) !important;
     }
 
     .greeting {
-        color: var(--page-header-txtColor) !important;
+        color: var(--page-content-txtColor) !important;
     }
 }
 
