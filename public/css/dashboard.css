@@ -340,9 +340,8 @@ article h3 {
 }
 
 .search-and-user {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-column-gap: 50px;
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
     background: var(--page-content-bgColor);
     margin-bottom: 30px;
