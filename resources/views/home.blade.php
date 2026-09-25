@@ -117,7 +117,7 @@
 
     <header class="page-header">
         <nav>
-            <a href="/" aria-label="forecastr logo" class="logo">
+            <a href="{{ route('home') }}" aria-label="Sawtru logo" class="logo">
                 <img src="{{ URL::asset('images/logo.svg') }}">
             </a>
             <button class="toggle-mob-menu" aria-expanded="false" aria-label="open menu">
