@@ -13,6 +13,20 @@ use Illuminate\Support\Arr;
 class UserController extends Controller
 {
     /**
+     * Defining access control for user management.
+     *
+     * @return void
+     */
+    function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:list-users', ['only' => ['index', 'show']]);
+        $this->middleware('permission:create-users', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit-users', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-users', ['only' => ['destroy']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
