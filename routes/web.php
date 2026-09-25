@@ -26,7 +26,9 @@ Route::get('/t', function () {
     event(new \App\Events\SendMessage());
     dd('Event Run Successfully.');
 });
-Auth::routes();
+// Registration is disabled: this is an internal tool and accounts are
+// created by an Admin from the Manage Users screen.
+Auth::routes(['register' => false]);
 
 Route::get('/dashboard', [HomeController::class, 'index'])->name('home');
 
