@@ -3,6 +3,42 @@
 
 @section('articles')
     <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+    <style>
+        /* Add New Project — tidy header and dimensions layout (#36) */
+        .proj-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding-bottom: 14px;
+        }
+        .proj-head h2 { margin: 0; }
+        .contact-form .section-title { margin: 6px 0 14px; }
+        .dims-grid {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 10px;
+        }
+        .dims-grid .dim-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 140px;
+        }
+        .dims-grid .dim-field label { margin: 0; }
+        .dims-grid .dim-field input { width: 100%; }
+        .dims-grid .dim-or {
+            display: flex;
+            align-items: center;
+            padding-bottom: 10px;
+            font-weight: 700;
+            opacity: 0.75;
+        }
+    </style>
     @if ($errors->any())
         <div class="alert alert-danger">
             <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -16,16 +52,9 @@
     @can('create-project')
         <div class="rightside">
             <div class="contact-form" id="contact-form">
-                <div>
-                    <div>
-                        <div>
-                            <a class="btn btn-warning" href="{{ route('projects.index') }}"><i class="fa fa-arrow-left"></i>
-                                Back</a>
-                        </div>
-                        <div>
-                            <h2>Add New Project</h2>
-                        </div>
-                    </div>
+                <div class="proj-head">
+                    <h2>Add New Project</h2>
+                    <a class="btn btn-warning" href="{{ route('projects.index') }}"><i class="fa fa-arrow-left"></i> Back</a>
                 </div>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
@@ -65,73 +94,43 @@
                                 <div>
                                     <div class="row">
                                         <div class="col-lg-12 margin-tb">
-                                            <hr>
-                                            <h4>Machine Dimentions: </h4>
-                                            <div class="pull-left">
-                                                <table>
-                                                    <tr>
-                                                        <td style="max-width:85px">
-                                                            <label for="L">
-                                                                <span class="required">Length:</span>
-                                                            </label>
-                                                            <input type="number" id="L" name="L" value=""
-                                                                placeholder="Number" min="0" step="0.01"
-                                                                tabindex="3" required="required" />
-                                                        </td>
-                                                        <td style="max-width:85px">
-                                                            <label for="W">
-                                                                <span class="required">Width:</span>
-                                                            </label>
-                                                            <input type="number" id="W" name="W" value=""
-                                                                placeholder="Number" min="0" step="0.01"
-                                                                tabindex="4" required="required" />
-                                                        </td>
-                                                        <td style="max-width:85px">
-                                                            <label for="H">
-                                                                <span class="required">Height:</span>
-                                                            </label>
-                                                            <input type="number" id="H" name="H" value=""
-                                                                placeholder="Number" min="0" step="0.01"
-                                                                tabindex="5" required="required" />
-                                                        </td>
-                                                        <td>
-                                                            <label for="units1">
-                                                                <span class="required">Unit:</span>
-                                                            </label>
-                                                            <input type="text" id="units1" name="units1"
-                                                                required="required">
-                                                            {{-- <select type=" id="units1" name="units1"
-                                                                tabindex="6" required="required" >
-                                                                <option value="cm">CM</option>
-                                                                <option value="m">Meters</option>
-                                                                <option value="ft">Feets</option>
-                                                            </select> --}}
-                                                        </td>
-
-
-                                                        <td>
-
-                                                            <span>OR</span>
-                                                        </td>
-
-                                                        <td>
-                                                            <label for="volume">
-                                                                <span class="required">Volume:</span>
-                                                            </label>
-                                                            <input type="number" id="volume" name="volume" value=""
-                                                                placeholder="Number" tabindex="6" required="required"
-                                                                min="0" step="0.01" />
-                                                        </td>
-                                                        <td>
-                                                            <label for="units1">
-                                                                <span class="required">Unit:</span>
-                                                            </label>
-                                                            <input type="text" id="units2" name="units2"
-                                                                required="required">
-
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                            <h4 class="section-title">Machine Dimensions</h4>
+                                            <div class="dims-grid">
+                                                <div class="dim-field">
+                                                    <label for="L"><span class="required">Length:</span></label>
+                                                    <input type="number" id="L" name="L" value=""
+                                                        placeholder="Number" min="0" step="0.01"
+                                                        tabindex="3" required="required" />
+                                                </div>
+                                                <div class="dim-field">
+                                                    <label for="W"><span class="required">Width:</span></label>
+                                                    <input type="number" id="W" name="W" value=""
+                                                        placeholder="Number" min="0" step="0.01"
+                                                        tabindex="4" required="required" />
+                                                </div>
+                                                <div class="dim-field">
+                                                    <label for="H"><span class="required">Height:</span></label>
+                                                    <input type="number" id="H" name="H" value=""
+                                                        placeholder="Number" min="0" step="0.01"
+                                                        tabindex="5" required="required" />
+                                                </div>
+                                                <div class="dim-field">
+                                                    <label for="units1"><span class="required">Unit:</span></label>
+                                                    <input type="text" id="units1" name="units1"
+                                                        placeholder="cm" required="required">
+                                                </div>
+                                                <div class="dim-or"><span>OR</span></div>
+                                                <div class="dim-field">
+                                                    <label for="volume"><span class="required">Volume:</span></label>
+                                                    <input type="number" id="volume" name="volume" value=""
+                                                        placeholder="Number" tabindex="6" required="required"
+                                                        min="0" step="0.01" />
+                                                </div>
+                                                <div class="dim-field">
+                                                    <label for="units2"><span class="required">Unit:</span></label>
+                                                    <input type="text" id="units2" name="units2"
+                                                        placeholder="m³" required="required">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
