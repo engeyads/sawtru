@@ -738,7 +738,10 @@ article h3 {
     align-items: center;
     justify-content: flex-end;
     margin-top: 10px;
-    color: #f1efec;
+    padding: 8px 4px;
+    /* The footer sits on the light content background in both themes, so it
+       needs a dark, readable color instead of near-white. */
+    color: var(--page-content-txtColor);
 }
 
 .page-footer a {
