@@ -2,17 +2,7 @@
 
 
 @section('articles')
-    <div>
-        <div>
-            <div>
-                <a class="btn btn-warning" href="{{ route('projects.index') }}"><i class="fa fa-arrow-left"></i>
-                    Back</a>
-            </div>
-            <div>
-                <h2>Add New Project</h2>
-            </div>
-        </div>
-    </div>
+    <x-page-header title="Edit Project" :back="route('projects.index')"></x-page-header>
 
     @if ($errors->any())
         <div class="alert alert-danger">

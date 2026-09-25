@@ -20,20 +20,11 @@
             @endif
             {{-- last phases --}}
 
+            <x-page-header title="Project Purchase Order" :back="route('projects.index')"></x-page-header>
             <div class="contact-form">
-
-
-
                 <div class="rightside">
                     <div>
                         <div>
-                            <div>
-                                <a class="btn btn-warning" href="{{ route('projects.index') }}"><i class="fa fa-arrow-left"></i>
-                                    Back</a>
-                            </div>
-                            <div class="pull-left">
-                                <h2>Project Purchase Order</h2>
-                            </div>
                             <div class="pull-right">
                                 <table>
                                     <tr>

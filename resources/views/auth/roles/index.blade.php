@@ -5,33 +5,13 @@
     @can('list-role')
 
         <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+        <x-page-header title="Manage Roles" :back="route('settings.index')">
+            @can('create-role')
+                <a class="btn btn-warning" href="{{ route('roles.create') }}">Create Role</a>
+            @endcan
+        </x-page-header>
         <div class="rightside">
             <div id="contact-form">
-                <div>
-
-                </div>
-                <div>
-                    <div>
-                        <div>
-                            <div>
-                                <div>
-                                    <a class="btn btn-warning" href="{{ route('settings.index') }}"><i
-                                            class="fa fa-arrow-left"></i>
-                                        Back</a>
-                                </div>
-                                <div>
-                                    <h2>Manage Roles</h2>
-                                </div>
-                            </div>
-                        </div>
-                        @can('create-role')
-                        <div>
-                            <a class="btn btn-warning" href="{{ route('roles.create') }}">
-                                Create Role</a>
-                        </div>
-                        @endcan
-                    </div>
-                </div>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         <p>{{ $message }}</p>
@@ -62,11 +42,13 @@
                                         <td>{{ $role->name }}</td>
                                         <td>
                                             @can('delete-role')
-                                                {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $role->id], 'style' => 'display:inline']) !!}
-                                                <button class='editing fa fa-trash'></button>
+                                                {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $role->id], 'id' => 'delete-role-' . $role->id, 'style' => 'display:none']) !!}
                                                 {!! Form::close() !!}
+                                                <button type="button" title="Delete" class='editing fa fa-trash'
+                                                    onclick="Sawtru.confirmDelete('{{ $role->name }}', function () { document.getElementById('delete-role-{{ $role->id }}').submit(); })"></button>
                                             @endcan
-                                            <a class="editing fa fa-eye" href="{{ route('roles.show', $role->id) }}"></a>
+                                            <button type="button" title="View" class="editing fa fa-eye"
+                                                onclick="Sawtru.viewInModal('{{ route('roles.show', $role->id) }}', 'Role Details')"></button>
                                             @can('edit-role')
                                                 <a class="editing fa fa-edit" href="{{ route('roles.edit', $role->id) }}"></a>
                                             @endcan

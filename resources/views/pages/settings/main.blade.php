@@ -3,6 +3,7 @@
 
 @section('articles')
     <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+    <x-page-header title="Settings" :back="route('home')"></x-page-header>
     @if ($errors->any())
         <div class="alert alert-danger">
             <strong>Whoops!</strong> There were some problems with your input.<br><br>

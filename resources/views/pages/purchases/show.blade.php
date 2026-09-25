@@ -16,11 +16,9 @@
                 </div>
             @endif
             {{-- last phases --}}
+            <x-page-header title="Purchase Order" :back="route('purchases.index')"></x-page-header>
             <div class="contact-form">
                 <div class="rightside">
-                    <div>
-                        <h2>View as PO Admin</h2>
-                    </div>
                         <input type="text" value="{{ $purchases->serial_no }}" readonly>
                         <table>
                             <thead>

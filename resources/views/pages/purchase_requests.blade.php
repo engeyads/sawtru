@@ -2,18 +2,9 @@
 
 @section('articles')
     <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+    <x-page-header title="Purchase Orders"></x-page-header>
     <div class="rightside">
         <div id="contact-form">
-            <div>
-
-            </div>
-            <div>
-                <div>
-                    <div>
-                        <h2>Purchase Orders</h2>
-                    </div>
-                </div>
-            </div>
 
             @if ($message = Session::get('success'))
                 <div class="alert alert-success">
@@ -121,7 +112,7 @@
                             deleteRec($(this).attr('id').replace( /^\D+/g, ''));
                         });
                         function deleteRec(num) {
-                            if (confirm("Are you sure you want to delete?")) {
+                            Sawtru.confirmDelete('#' + num, function () {
                                 $.ajax({
                                     type: 'delete',
                                     url: "/dashboard/purchases/" + num,
@@ -129,31 +120,11 @@
                                         '_token': $("meta[name='csrf-token']").attr("content"),
                                         'id': num,
                                     },
-                                    success: function(data) {
-                                        $("#msg").html(data.msg);
+                                    success: function() {
+                                        window.location.reload();
                                     }
                                 });
-                            } else {
-                                return false;
-                            }
-                        }
-
-                        function deleteRec(num, nm) {
-                            if (confirm("Are you sure you want to delete '" + nm + "' ?")) {
-                                $.ajax({
-                                    type: 'delete',
-                                    url: "/dashboard/purchases/" + num,
-                                    data: {
-                                        '_token': $("meta[name='csrf-token']").attr("content"),
-                                        'id': num,
-                                    },
-                                    success: function(data) {
-                                        $("#msg").html(data.msg);
-                                    }
-                                });
-                            } else {
-                                return false;
-                            }
+                            });
                         }
 
                         function PDFDownload(num) {
@@ -327,21 +298,19 @@
                     </script>
                     <script>
                         function deleteRec(num) {
-                            if (confirm("Are you sure you want to delete it? " + num)) {
+                            Sawtru.confirmDelete('#' + num, function () {
                                 $.ajax({
                                     type: 'delete',
-                                    url: "purchases.destroy",
+                                    url: "/dashboard/purchases/" + num,
                                     data: {
                                         '_token': $("meta[name='csrf-token']").attr("content"),
                                         'id': num,
                                     },
-                                    success: function(data) {
-                                        $("#msg").html(data.msg);
+                                    success: function() {
+                                        window.location.reload();
                                     }
                                 });
-                            } else {
-                                return false;
-                            }
+                            });
                         }
 
                         function PDFDownload(num) {

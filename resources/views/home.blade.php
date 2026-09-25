@@ -120,6 +120,9 @@
             <a href="{{ route('home') }}" aria-label="Sawtru logo" class="logo">
                 <img src="{{ URL::asset('images/logo.svg') }}">
             </a>
+            <a href="{{ route('home') }}" aria-label="Sawtru logo" class="logo-collapsed">
+                <img src="{{ URL::asset('images/logo-short.svg') }}">
+            </a>
             <button class="toggle-mob-menu" aria-expanded="false" aria-label="open menu">
                 <svg width="20" height="20" aria-hidden="true">
                     <use xlink:href="#down"></use>
@@ -127,21 +130,21 @@
             </button>
             <ul class="admin-menu">
                 <li>
-                    <a href="/dashboard">
+                    <a href="/dashboard" class="{{ request()->is('dashboard') ? 'active' : '' }}">
                         <span style="font-size:22px;padding-left:1px;" class="fa fa-home col-2"></span>
                         <span style="padding-left:3px;">Home</span>
                     </a>
                 </li>
                 @can('list-users')
                 <li>
-                    <a href="{{ route('users.index') }}">
+                    <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
                         <span style="font-size:22px;padding-left:2px;" class="fa fa-plus col-2"></span>
                         <span style="padding-left:3px;">Manage Users</span>
                     </a>
                 </li>
                  @endcan
                 <li>
-                    <a href="{{ route('profile') }}">
+                    <a href="{{ route('profile') }}" class="{{ request()->routeIs('profile') ? 'active' : '' }}">
                         <svg>
                             <use xlink:href="#users"></use>
                         </svg>
@@ -152,7 +155,7 @@
                     @canany(['list-all-project', 'list-self-project', 'list-project'])
                         @can('create-project')
                             <li>
-                                <a href="{{ route('projects.create') }}">
+                                <a href="{{ route('projects.create') }}" class="{{ request()->routeIs('projects.create') ? 'active' : '' }}">
                                     <svg>
                                         <use xlink:href="#trends"></use>
                                     </svg>
@@ -161,7 +164,7 @@
                             </li>
                         @endcan
                         <li>
-                            <a href="{{ route('projects.index') }}">
+                            <a href="{{ route('projects.index') }}" class="{{ (request()->routeIs('projects.index') || request()->routeIs('projects.show') || request()->routeIs('projects.edit')) ? 'active' : '' }}">
                                 <svg>
                                     <use xlink:href="#collection"></use>
                                 </svg>
@@ -172,7 +175,7 @@
                 @endcanany
                 @canany(['list-self-purchases', 'list-purchases', 'list-project'])
                         <li>
-                            <a href="{{ route('purchases.index') }}">
+                            <a href="{{ route('purchases.index') }}" class="{{ request()->routeIs('purchases.*') ? 'active' : '' }}">
                                 <svg>
                                     <use xlink:href="#collection"></use>
                                 </svg>
@@ -201,7 +204,7 @@
                     <h3>Settings</h3>
                 </li>
                 <li>
-                    <a href="{{ route('settings.index') }}">
+                    <a href="{{ route('settings.index') }}" class="{{ (request()->routeIs('settings.*') || request()->routeIs('roles.*')) ? 'active' : '' }}">
                         <svg>
                             <use xlink:href="#options"></use>
                         </svg>
@@ -303,6 +306,40 @@
             </a>
         </footer>
     </section>
+
+    {{-- Shared "view details" modal: filled from a show page fetched over
+         AJAX, so individual pages don't need their own modal markup. --}}
+    <div id="sawtruViewModal" class="sawtru-modal" hidden>
+        <div class="sawtru-modal__backdrop" data-modal-close></div>
+        <div class="sawtru-modal__dialog sawtru-modal__dialog--view" role="dialog" aria-modal="true">
+            <div class="sawtru-modal__head">
+                <h3 id="sawtruViewModalTitle">Details</h3>
+                <button type="button" class="sawtru-modal__x" data-modal-close aria-label="Close">&times;</button>
+            </div>
+            <div class="sawtru-modal__body" id="sawtruViewModalBody">
+                <div class="sawtru-modal__loading">Loading&hellip;</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Shared "confirm delete" modal, used in place of window.confirm(). --}}
+    <div id="sawtruConfirmModal" class="sawtru-modal" hidden>
+        <div class="sawtru-modal__backdrop" data-modal-close></div>
+        <div class="sawtru-modal__dialog sawtru-modal__dialog--confirm" role="alertdialog" aria-modal="true">
+            <div class="sawtru-modal__head">
+                <h3>Delete</h3>
+                <button type="button" class="sawtru-modal__x" data-modal-close aria-label="Close">&times;</button>
+            </div>
+            <div class="sawtru-modal__body">
+                <p class="sawtru-modal__item" id="sawtruConfirmModalItem"></p>
+                <p id="sawtruConfirmModalMessage">Are you sure you want to delete this? This cannot be undone.</p>
+            </div>
+            <div class="sawtru-modal__foot">
+                <button type="button" class="btn sawtru-btn-cancel" data-modal-close>Cancel</button>
+                <button type="button" class="btn sawtru-btn-danger" id="sawtruConfirmModalConfirm">Delete</button>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
         const html1 = document.documentElement;
         const body1 = document.body;
@@ -316,8 +353,17 @@
         const lightModeClass1 = "light-mode";
 
         /*TOGGLE HEADER STATE*/
+        // Restore the saved collapse state so it persists across page loads.
+        if (localStorage.getItem("sidebar-collapsed") === "true") {
+            body1.classList.add(collapsedClass1);
+            collapseBtn1.setAttribute("aria-expanded", "false");
+            collapseBtn1.setAttribute("aria-label", "expand menu");
+        }
+
         collapseBtn1.addEventListener("click", function() {
             body1.classList.toggle(collapsedClass1);
+            var isCollapsed = body1.classList.contains(collapsedClass1);
+            localStorage.setItem("sidebar-collapsed", isCollapsed ? "true" : "false");
             this.getAttribute("aria-expanded") == "true" ?
                 this.setAttribute("aria-expanded", "false") :
                 this.setAttribute("aria-expanded", "true");
@@ -440,5 +486,80 @@
             item.addEventListener('mouseover', rjs_hover_cursor);
             item.addEventListener('mouseleave', rjs_unhover_cursor);
         })
+    </script>
+
+    {{-- Shared modal controller: "view details" (fetches a show page and
+         injects its content) and "confirm delete" (replaces confirm()). --}}
+    <script>
+        window.Sawtru = (function () {
+            var viewModal = document.getElementById('sawtruViewModal');
+            var viewTitle = document.getElementById('sawtruViewModalTitle');
+            var viewBody = document.getElementById('sawtruViewModalBody');
+            var confirmModal = document.getElementById('sawtruConfirmModal');
+            var confirmItem = document.getElementById('sawtruConfirmModalItem');
+            var confirmMsg = document.getElementById('sawtruConfirmModalMessage');
+            var confirmBtn = document.getElementById('sawtruConfirmModalConfirm');
+            var pendingConfirm = null;
+
+            function open(modal) {
+                modal.hidden = false;
+                document.body.classList.add('sawtru-modal-open');
+            }
+
+            function close(modal) {
+                modal.hidden = true;
+                document.body.classList.remove('sawtru-modal-open');
+            }
+
+            function closeAll() {
+                close(viewModal);
+                close(confirmModal);
+                pendingConfirm = null;
+            }
+
+            document.querySelectorAll('[data-modal-close]').forEach(function (el) {
+                el.addEventListener('click', closeAll);
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') closeAll();
+            });
+
+            function viewInModal(url, title) {
+                viewTitle.textContent = title || 'Details';
+                viewBody.innerHTML = '<div class="sawtru-modal__loading">Loading&hellip;</div>';
+                open(viewModal);
+                fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(function (res) { return res.text(); })
+                    .then(function (html) {
+                        var doc = new DOMParser().parseFromString(html, 'text/html');
+                        var article = doc.querySelector('.page-content .grid > article') || doc.querySelector('article');
+                        if (!article) {
+                            viewBody.innerHTML = '<p>Could not load details.</p>';
+                            return;
+                        }
+                        var head = article.querySelector('.content-head');
+                        if (head) head.remove();
+                        viewBody.innerHTML = article.innerHTML;
+                    })
+                    .catch(function () {
+                        viewBody.innerHTML = '<p>Could not load details.</p>';
+                    });
+            }
+
+            function confirmDelete(label, onConfirm, message) {
+                confirmItem.textContent = label || '';
+                confirmMsg.textContent = message || 'Are you sure you want to delete this? This cannot be undone.';
+                pendingConfirm = onConfirm;
+                open(confirmModal);
+            }
+
+            confirmBtn.addEventListener('click', function () {
+                var fn = pendingConfirm;
+                closeAll();
+                if (typeof fn === 'function') fn();
+            });
+
+            return { viewInModal: viewInModal, confirmDelete: confirmDelete };
+        })();
     </script>
 @endsection

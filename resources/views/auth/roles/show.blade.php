@@ -2,58 +2,43 @@
 
 
 @section('articles')
-    @can('list-role')
+@can('list-role')
 
-    <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
-
-    @php
-        $groups = [
-            'Users' => [], 'Settings' => [], 'Projects' => [],
-            'Purchases' => [], 'Roles' => [], 'Other' => [],
-        ];
-        foreach ($rolePermissions as $p) {
-            $n = $p->name;
-            if (str_contains($n, 'user'))              $groups['Users'][] = $p;
-            elseif (str_contains($n, 'setting'))       $groups['Settings'][] = $p;
-            elseif (str_contains($n, 'role'))          $groups['Roles'][] = $p;
-            elseif (str_contains($n, 'purchase'))      $groups['Purchases'][] = $p;
-            elseif (str_contains($n, 'project')
-                 || str_contains($n, 'assembling')
-                 || str_contains($n, 'pdf'))           $groups['Projects'][] = $p;
-            else                                       $groups['Other'][] = $p;
-        }
-        $groups = array_filter($groups);
-    @endphp
+    <x-page-header title="Show Role" :back="route('roles.index')"></x-page-header>
 
     <div class="role-view">
-        <div class="role-view-head">
-            <h2>Show Role</h2>
-            <a class="btn btn-primary" href="{{ route('roles.index') }}">Back</a>
+        <div class="role-view-name">
+            <strong>Name:</strong> {{ $role->name }}
         </div>
 
-        <div class="role-name">
-            <span class="field-label">Name</span>
-            {{ $role->name }}
+        <div class="role-view-perms">
+            <strong>Permissions:</strong>
+            <div class="role-view-chips">
+                @forelse ($rolePermissions as $v)
+                    <span class="role-view-chip">{{ ucfirst(str_replace('-', ' ', $v->name)) }}</span>
+                @empty
+                    <span class="role-view-empty">No permissions.</span>
+                @endforelse
+            </div>
         </div>
-
-        <span class="field-label">Permissions</span>
-        @if (count($groups))
-            @foreach ($groups as $groupName => $items)
-                <div class="perm-section">
-                    <h3>{{ $groupName }}</h3>
-                    <div class="perm-chips">
-                        @foreach ($items as $value)
-                            <span class="perm-chip">{{ ucfirst(str_replace('-', ' ', $value->name)) }}</span>
-                        @endforeach
-                    </div>
-                </div>
-            @endforeach
-        @else
-            <p class="no-perms">This role has no permissions.</p>
-        @endif
     </div>
 
-    @else
-        <div><h2>You are not allowed to enter this page...</h2></div>
-    @endcan
+    <style>
+        .role-view { padding-top: 4px; }
+        .role-view-name { font-size: 1.05rem; margin-bottom: 16px; }
+        .role-view-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .role-view-chip {
+            background: #242e42;
+            border: 1px solid rgba(217, 168, 64, 0.28);
+            color: #e7edf7;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+        }
+        .role-view-empty { opacity: 0.7; }
+    </style>
+
+@else
+    <h4>You are not allowed to enter this page...</h4>
+@endcan
 @endsection

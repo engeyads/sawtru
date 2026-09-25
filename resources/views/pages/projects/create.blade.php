@@ -4,18 +4,16 @@
 @section('articles')
     <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
     <style>
-        /* Add New Project — tidy header and dimensions layout (#36) */
-        .proj-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-            padding-bottom: 14px;
-        }
-        .proj-head h2 { margin: 0; }
+        /* Add New Project dimensions layout (#36). The page header uses the
+           shared page-header component and .content-head styles. */
         .contact-form .section-title { margin: 6px 0 14px; }
+        .form-nav {
+            clear: both;
+            display: flex;
+            justify-content: flex-end;
+            margin: 28px 0 12px;
+        }
+        .form-nav .btn { margin: 0; }
         .dims-grid {
             display: flex;
             flex-wrap: wrap;
@@ -50,12 +48,9 @@
         </div>
     @endif
     @can('create-project')
+        <x-page-header title="Add New Project" :back="route('projects.index')"></x-page-header>
         <div class="rightside">
             <div class="contact-form" id="contact-form">
-                <div class="proj-head">
-                    <h2>Add New Project</h2>
-                    <a class="btn btn-warning" href="{{ route('projects.index') }}"><i class="fa fa-arrow-left"></i> Back</a>
-                </div>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         <p>{{ $message }}</p>
@@ -155,7 +150,7 @@
                                                 required="required" />
                                         </div>
                                     </div>
-                                    <div class="pull-left">
+                                    <div class="form-nav">
                                         <span id="toPhase2" class="btn btn-success" tabindex="8">Next</span>
                                     </div>
                                 </div>

@@ -3,27 +3,13 @@
 @section('articles')
     @can('list-users')
         <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+        <x-page-header title="Manage Users" :back="route('settings.index')">
+            @can('create-users')
+                <a class="btn btn-warning" href="{{ route('users.create') }}">Create User</a>
+            @endcan
+        </x-page-header>
         <div class="rightside">
             <div id="contact-form">
-                <div>
-
-                </div>
-                <div>
-                    <div>
-                        <div>
-                            <a class="btn btn-warning" href="{{ route('settings.index') }}"><i class="fa fa-arrow-left"></i>
-                                Back</a>
-                        </div>
-                        <div>
-                            <h2>Manage Users</h2>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    @can('create-users')
-                        <a class="btn btn-warning" href="{{ route('users.create') }}">Create User</a>
-                    @endcan
-                </div>
 
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
@@ -63,12 +49,14 @@
                                         <td>{{ $user->created_at }}</td>
                                         <td>
                                             @can('delete-users')
-                                                <span title="Delete Project" class="editing fa fa-trash"
-                                                    onclick="deleteRec({{ $user->id }})"></span>
+                                                {!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id], 'id' => 'delete-user-' . $user->id, 'style' => 'display:none']) !!}
+                                                {!! Form::close() !!}
+                                                <span title="Delete" class="editing fa fa-trash"
+                                                    onclick="Sawtru.confirmDelete('{{ $user->name }}', function () { document.getElementById('delete-user-{{ $user->id }}').submit(); })"></span>
                                             @endcan
                                             @can('list-users')
-                                                <span title="Edit" class="editing fa fa-eye"
-                                                    onclick="location.href ='/dashboard/users/{{ $user->id }}'"></span>
+                                                <span title="View" class="editing fa fa-eye"
+                                                    onclick="Sawtru.viewInModal('/dashboard/users/{{ $user->id }}', 'User Details')"></span>
                                             @endcan
                                             @can('edit-users')
                                                 <span title="Edit" class="editing fa fa-edit"
@@ -87,28 +75,6 @@
             {{ $data->links('pagination::bootstrap-5') }}
         </center>
 
-        @push('custom-scripts')
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-            <script>
-                function deleteRec(num) {
-                    if (confirm("Are you sure you want to delete it? " + num)) {
-                        $.ajax({
-                            type: 'delete',
-                            url: "/dashboard/users/" + num,
-                            data: {
-                                '_token': $("meta[name='csrf-token']").attr("content"),
-                                'id': num,
-                            },
-                            success: function(data) {
-                                $("#msg").html(data.msg);
-                            }
-                        });
-                    } else {
-                        return false;
-                    }
-                }
-            </script>
-        @endpush
     @else
         <div class="row">
             <div class="col-lg-12 margin-tb">

@@ -16,6 +16,7 @@
                 </div>
             @endif
             {{-- last phases --}}
+            <x-page-header title="Update Purchase Order" :back="route('purchases.index')"></x-page-header>
             <div class="contact-form">
                 <div class="rightside">
                     <form action="{{ route('purchases.update_order', $purchases,$purchases->id) }}" method="POST">

@@ -4,16 +4,7 @@
 @section('articles')
 @can('list-users')
 
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2> Show User</h2>
-        </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('users.index') }}"> Back</a>
-        </div>
-    </div>
-</div>
+<x-page-header title="Show User" :back="route('users.index')"></x-page-header>
 
 
 <div class="row">

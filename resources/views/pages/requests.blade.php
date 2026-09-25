@@ -2,18 +2,9 @@
 
 @section('articles')
     <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
+    <x-page-header title="Projects"></x-page-header>
     <div class="rightside">
         <div id="contact-form">
-            <div>
-
-            </div>
-            <div>
-                <div>
-                    <div>
-                        <h2>Projects</h2>
-                    </div>
-                </div>
-            </div>
 
             @if ($message = Session::get('success'))
                 <div class="alert alert-success">
@@ -94,7 +85,7 @@
                 @push('custom-scripts')
                     <script>
                         function deleteRec(num, nm) {
-                            if (confirm("Are you sure you want to delete '" + nm + "' ?")) {
+                            Sawtru.confirmDelete(nm, function () {
                                 $.ajax({
                                     type: 'delete',
                                     url: "/dashboard/projects/" + num,
@@ -102,13 +93,11 @@
                                         '_token': $("meta[name='csrf-token']").attr("content"),
                                         'id': num,
                                     },
-                                    success: function(data) {
-                                        $("#msg").html(data.msg);
+                                    success: function() {
+                                        window.location.reload();
                                     }
                                 });
-                            } else {
-                                return false;
-                            }
+                            });
                         }
 
 
@@ -203,10 +192,11 @@
                                         <td>
                                             <div style="display:inline-flex">
                                                 @can('delete-projects')
-                                                    {{ Form::open(['method' => 'DELETE', 'route' => ['projects.destroy', $data->id]]) }}
+                                                    {{ Form::open(['method' => 'DELETE', 'route' => ['projects.destroy', $data->id], 'id' => 'delete-project-' . $data->id]) }}
                                                     {{ Form::hidden('id', $data->id) }}
-                                                    <button type="submit" class="editing fa fa-trash"></button>
                                                     {{ Form::close() }}
+                                                    <button type="button" class="editing fa fa-trash"
+                                                        onclick="Sawtru.confirmDelete('{{ $data->pname }}', function () { document.getElementById('delete-project-{{ $data->id }}').submit(); })"></button>
                                                 @endcan
                                                 @can('create-project')
                                                     @if ($data->isApproved == 1)
@@ -251,21 +241,19 @@
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
                     <script>
                         function deleteRec(num) {
-                            if (confirm("Are you sure you want to delete it? " + num)) {
+                            Sawtru.confirmDelete('#' + num, function () {
                                 $.ajax({
                                     type: 'delete',
-                                    url: "projects.destroy",
+                                    url: "/dashboard/projects/" + num,
                                     data: {
                                         '_token': $("meta[name='csrf-token']").attr("content"),
                                         'id': num,
                                     },
-                                    success: function(data) {
-                                        $("#msg").html(data.msg);
+                                    success: function() {
+                                        window.location.reload();
                                     }
                                 });
-                            } else {
-                                return false;
-                            }
+                            });
                         }
 
                         function PDFDownload(num) {

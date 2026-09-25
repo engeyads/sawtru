@@ -42,6 +42,8 @@
 
 ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 a,
@@ -159,6 +161,17 @@ body {
     fill: var(--white);
 }
 
+.page-header .logo-collapsed {
+    display: none;
+    padding: 6px 0;
+    text-align: center;
+}
+
+.page-header .logo-collapsed img {
+    width: 28px;
+    height: 28px;
+}
+
 .page-header .toggle-mob-menu {
     display: none;
     margin-left: 5px;
@@ -220,14 +233,12 @@ body {
     font-size: 0.9rem;
 }
 
-.page-header .admin-menu a .active,
-.page-header .admin-menu button .active,
 .page-header .admin-menu a:hover,
 .page-header .admin-menu a:focus,
 .page-header .admin-menu button:hover,
 .page-header .admin-menu button:focus {
     background: var(--page-header-bgColor-hover);
-    color: var(--blue);
+    color: var(--label-new);
     outline: none;
 }
 
@@ -235,7 +246,20 @@ body {
 .page-header .admin-menu a:focus svg,
 .page-header .admin-menu button:hover svg,
 .page-header .admin-menu button:focus svg {
-    fill: var(--blue);
+    fill: var(--label-new);
+}
+
+/* Current page (or its parent, for sub-pages) highlighted in the sidebar. */
+.page-header .admin-menu a.active {
+    background: var(--page-header-bgColor-hover);
+    color: var(--label-new);
+    box-shadow: inset 3px 0 0 var(--label-new);
+}
+
+.page-header .admin-menu a.active svg,
+.page-header .admin-menu a.active .fa {
+    fill: var(--label-new);
+    color: var(--label-new);
 }
 
 
@@ -343,8 +367,13 @@ article h3 {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background: var(--page-content-bgColor);
-    margin-bottom: 30px;
+    /* Match the sidebar's colour so the chrome reads as one navigation, and
+       hug the top/left/right of the content area with no gap above it. */
+    background: var(--page-header-bgColor);
+    color: var(--page-header-txtColor);
+    padding: 12px 30px;
+    margin: -30px -30px 20px;
+    border-radius: 0;
 }
 
 .search-and-user form {
@@ -448,6 +477,8 @@ article h3 {
 
 .page-content .grid>article {
     display: flex;
+    /* Stack children (page header bar + content) and let them span full width. */
+    flex-direction: column;
     /* Inner padding so page content isn't flush against the panel edges. */
     padding: 24px 28px;
 
@@ -581,21 +612,45 @@ article h3 {
 
 @media screen and (min-width: 768px) {
     .collapsed .page-header {
-        width: 40px;
+        width: 56px;
     }
 
     .collapsed .page-header .admin-menu li>* {
-        padding: 10px;
+        padding: 12px 0;
+        justify-content: center;
     }
 
+    /* Hide the text labels and headings, but keep the icons — including the
+       Font Awesome icons, which are <span class="fa">. */
     .collapsed .page-header .logo,
-    .collapsed .page-header .admin-menu span,
+    .collapsed .page-header .admin-menu span:not([class*="fa-"]),
     .collapsed .page-header .admin-menu .menu-heading {
         display: none;
     }
 
+    /* Show the small logo mark (top-left) only when collapsed. */
+    .collapsed .page-header .logo-collapsed {
+        display: block;
+    }
+
     .collapsed .page-header .admin-menu svg {
         margin-right: 0;
+    }
+
+    .collapsed .page-header .admin-menu a,
+    .collapsed .page-header .admin-menu button {
+        justify-content: center;
+    }
+
+    /* The Font Awesome icons carry a Bootstrap .col-2 class that adds width
+       and padding; neutralise it so the icons sit centered in the rail. */
+    .collapsed .page-header .admin-menu .fa {
+        width: auto;
+        max-width: none;
+        flex: 0 0 auto;
+        margin: 0;
+        padding: 0 !important;
+        text-align: center;
     }
 
     .collapsed .page-header .collapse-btn svg {
@@ -603,19 +658,18 @@ article h3 {
     }
 
     .collapsed .page-content {
-        left: 40px;
-        width: calc(100% - 40px);
+        left: 56px;
+        width: calc(100% - 56px);
     }
 
     .admin-profile{
-        /* The top bar sits on the light content background in both themes,
-           so its text/icons must use the content text color, not the
-           sidebar's (light) text color. */
-        color: var(--page-content-txtColor) !important;
+        /* The top bar now uses the sidebar's navy colour, so its text/icons
+           use the sidebar (light) text colour. */
+        color: var(--page-header-txtColor) !important;
     }
 
     .greeting {
-        color: var(--page-content-txtColor) !important;
+        color: var(--page-header-txtColor) !important;
     }
 }
 
@@ -1138,64 +1192,211 @@ article h3 {
 }
 
 
-/* ROLE VIEW (Show Role) — read-only, grouped permission chips
+/* SHARED PAGE HEADER BAR (x-page-header)
+   Must be a direct child of .grid > article so the negative margins cancel
+   the panel padding and the bar hugs the panel's top/left/right edges.
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.role-view {
-    width: 100%;
-    max-width: 1040px;
-    margin: 0 auto;
+.content-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: -24px -28px 24px;
+    padding: 16px 28px;
+    background: #242e42;
+    /* The bar is always navy, so its text must always be light (readable in
+       both dark and light themes). */
+    color: #e7edf7;
+    border-bottom: 3px solid #D9A840;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
-.role-view .role-view-head {
+.content-head .content-head__title,
+.content-head h2 {
+    color: #f4f7fb;
+}
+
+.content-head .content-head__title {
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Cancel the global .btn margin-bottom so buttons sit centered on the line. */
+.content-head .btn {
+    margin: 0;
+}
+
+.content-head__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media screen and (max-width: 767px) {
+    .content-head {
+        margin: -16px -16px 16px;
+        padding: 14px 16px;
+        flex-wrap: wrap;
+    }
+    .content-head__actions {
+        margin-left: 0;
+    }
+}
+
+
+/* SHARED MODALS (view details / confirm delete)
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+body.sawtru-modal-open {
+    overflow: hidden;
+}
+
+.sawtru-modal[hidden] {
+    display: none;
+}
+
+.sawtru-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.sawtru-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 19, 28, 0.65);
+}
+
+.sawtru-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    max-height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+    background: var(--page-content-blockColor);
+    color: var(--page-content-txtColor);
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.sawtru-modal__dialog--view {
+    max-width: 720px;
+}
+
+.sawtru-modal__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 20px;
-}
-
-.role-view .role-view-head h2 {
-    margin: 0;
-}
-
-.role-view .field-label {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 6px;
-}
-
-.role-view .role-name {
-    font-size: 1.15rem;
-    margin-bottom: 24px;
-}
-
-.role-view .perm-section {
-    margin-bottom: 18px;
-}
-
-.role-view .perm-section h3 {
-    margin: 0 0 10px;
-    font-size: 0.82rem;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    color: #D9A840;
-}
-
-.role-view .perm-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.role-view .perm-chip {
+    padding: 16px 20px;
     background: #242e42;
-    border: 1px solid rgba(217, 168, 64, 0.28);
-    color: #e7edf7;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 0.9rem;
+    color: #f4f7fb;
+    border-bottom: 3px solid #D9A840;
+    flex: 0 0 auto;
 }
 
-.role-view .no-perms {
+.sawtru-modal__head h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #f4f7fb;
+}
+
+.sawtru-modal__x {
+    background: none;
+    border: none;
+    color: #f4f7fb;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    opacity: 0.75;
+}
+
+.sawtru-modal__x:hover {
+    opacity: 1;
+}
+
+.sawtru-modal__body {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.sawtru-modal__loading {
     opacity: 0.7;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.sawtru-modal__item {
+    font-weight: 700;
+    color: #D9A840;
+    margin: 0 0 8px;
+}
+
+.sawtru-modal__foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 14px 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    flex: 0 0 auto;
+}
+
+.sawtru-btn-cancel {
+    background: rgba(120, 137, 164, 0.2);
+    color: var(--page-content-txtColor);
+    border: none;
+}
+
+.sawtru-btn-danger {
+    background: var(--red, #ec1848);
+    color: #fff;
+    border: none;
+}
+
+/* Content pulled into the view modal keeps its own header bar hidden
+   (removed in JS) and any negative-margin page-header hugging neutralised,
+   since it now sits inside the modal body's own padding. */
+.sawtru-modal__body .content-head {
+    display: none;
+}
+
+
+/* ROLE BADGES (Bootstrap's .badge-success isn't reliably present in the
+   compiled Vite bundle, so define it explicitly here). */
+.badge.badge-success {
+    display: inline-block;
+    padding: 3px 10px;
+    margin: 2px 2px 2px 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fff;
+    background-color: #2e9e5b;
+    border-radius: 999px;
+}
+
+
+/* DATA TABLES (.reqs) — used by Users, Roles, Projects and Purchases lists.
+   Keep cell text tight to the left, and push the trailing actions column
+   to the right instead of leaving a wide default-table gap. */
+.reqs {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reqs th,
+.reqs td {
+    text-align: left;
+    padding: 12px 15px;
+}
+
+.reqs th:last-child,
+.reqs td:last-child {
+    text-align: right;
 }
