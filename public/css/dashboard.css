@@ -358,7 +358,7 @@ article h3 {
     font-size: 1.5rem;
     padding-left: 15px;
     background: var(--page-content-blockColor);
-    color: var(--white);
+    color: var(--page-input-fgColor);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
 }
@@ -383,21 +383,46 @@ article h3 {
 .search-and-user .admin-profile {
     display: flex;
     align-items: center;
+    gap: 18px;
+    padding-right: 6px;
 }
 
 .search-and-user .admin-profile .greeting {
-    margin: 0 10px 0 20px;
+    margin: 0 2px 0 0;
+    white-space: nowrap;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
 }
 
+/* Settings and logout icons: even sizing, spacing and a subtle hover so
+   the header reads as one tidy icon row. */
+.search-and-user .admin-profile .fa-cog,
+.search-and-user .admin-profile .fa-power-off {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
 
+.search-and-user .admin-profile .fa-cog:hover,
+.search-and-user .admin-profile .fa-power-off:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
 
 .search-and-user .admin-profile svg {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
 }
 
 .search-and-user .admin-profile .notifications {
     position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 .search-and-user .admin-profile .badge {
@@ -576,11 +601,14 @@ article h3 {
     }
 
     .admin-profile{
-        color: var(--page-header-txtColor) !important;
+        /* The top bar sits on the light content background in both themes,
+           so its text/icons must use the content text color, not the
+           sidebar's (light) text color. */
+        color: var(--page-content-txtColor) !important;
     }
 
     .greeting {
-        color: var(--page-header-txtColor) !important;
+        color: var(--page-content-txtColor) !important;
     }
 }
 
